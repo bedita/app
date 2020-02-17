@@ -6,6 +6,8 @@
     "license": "LGPL-3.0-or-later",
     "require": {
         "php": ">=7.2",
+        "bedita/i18n": "dev-feat/cakephp4-upgrade",
+        "bedita/web-tools": "dev-feat/cakephp4-upgrade",
         "cakephp/cakephp": "^4.0",
         "cakephp/migrations": "^3.0",
         "cakephp/plugin-installer": "^1.2",
