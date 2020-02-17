@@ -1,7 +1,7 @@
 {
-    "name": "bedita/be4-app",
+    "name": "bedita/bedita-app",
     "description": "BEdita 4 base frontend App",
-    "homepage": "https://bedita/be4-app",
+    "homepage": "https://bedita/bedita-app",
     "type": "cakephp-app",
     "license": "LGPL-3.0-or-later",
     "require": {
