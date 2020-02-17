@@ -39,6 +39,7 @@ class Installer
         'tmp/cache',
         'tmp/cache/models',
         'tmp/cache/persistent',
+        'tmp/cache/twigView',
         'tmp/cache/views',
         'tmp/sessions',
         'tmp/tests',
@@ -58,6 +59,7 @@ class Installer
         $rootDir = dirname(dirname(__DIR__));
 
         static::createAppLocalConfig($rootDir, $io);
+        static::createDotEnv($rootDir, $io);
         static::createWritableDirectories($rootDir, $io);
 
         static::setFolderPermissions($rootDir, $io);
@@ -83,6 +85,23 @@ class Installer
         if (!file_exists($appLocalConfig)) {
             copy($appLocalConfigTemplate, $appLocalConfig);
             $io->write('Created `config/app_local.php` file');
+        }
+    }
+
+    /**
+     * Create config/.env file if it does not exist.
+     *
+     * @param string $dir The application's root directory.
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return void
+     */
+    public static function createDotEnv($dir, $io)
+    {
+        $appDotEnv = $dir . '/config/.env';
+        $appDotEnvTemplate = $dir . '/config/.env.example';
+        if (!file_exists($appDotEnv)) {
+            copy($appDotEnvTemplate, $appDotEnv);
+            $io->write('Created `config/.env` file');
         }
     }
 
