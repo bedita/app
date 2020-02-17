@@ -6,15 +6,15 @@
     <title>BEdita4 Web App</title>
     {{ Html.meta('icon')|raw }}
 
-    {{ Html.css('milligram.min.css')|raw }}
-    {{ Html.css('cake.css')|raw }}
-    {{ Html.css('home.css')|raw }}
+    {{ Html.css('milligram.min')|raw }}
+    {{ Html.css('cake')|raw }}
 
     {{ _view.fetch('meta')|raw }}
     {{ _view.fetch('css')|raw }}
     {{ _view.fetch('script')|raw }}
 </head>
 <body>
-    <header><h1>BEdita4 sample Web App</h1></header>
+    {{ Flash.render()|raw }}
+    {{ _view.fetch('content')|raw }}
 </body>
 </html>
