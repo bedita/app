@@ -1,16 +1,13 @@
 {
-    "name": "bedita/bedita-app",
-    "description": "BEdita 4 base frontend App",
-    "homepage": "https://bedita/bedita-app",
+    "name": "bedita/be4-app",
+    "description": "BEdita 4 base WebApp",
+    "homepage": "https://www.bedita.com",
     "type": "cakephp-app",
     "license": "LGPL-3.0-or-later",
     "require": {
         "php": ">=7.2",
         "bedita/i18n": "dev-feat/cakephp4-upgrade",
         "bedita/web-tools": "dev-feat/cakephp4-upgrade",
-        "cakephp/cakephp": "^4.0",
-        "cakephp/migrations": "^3.0",
-        "cakephp/plugin-installer": "^1.2",
         "mobiledetect/mobiledetectlib": "^2.8"
     },
     "require-dev": {
