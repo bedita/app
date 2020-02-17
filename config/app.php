@@ -398,4 +398,17 @@ return [
     'Session' => [
         'defaults' => 'php',
     ],
+
+    /**
+     * API client configuration settings.
+     *
+     * ## Options
+     *
+     * - `apiBaseUrl` - The base URL for BEdita API instance.
+     * - `apiKey` - The API key to use with BEdita API instance.
+     */
+    'API' => [
+        'apiBaseUrl' => env('BEDITA_API'),
+        'apiKey' => env('BEDITA_API_KEY', null),
+    ],
 ];

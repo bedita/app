@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 
 /**
@@ -28,6 +29,13 @@ use Cake\Controller\Controller;
  */
 class AppController extends Controller
 {
+    /**
+     * BEdita4 API client
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    protected $apiClient = null;
+
     /**
      * Initialization hook method.
      *
@@ -49,5 +57,6 @@ class AppController extends Controller
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+        $this->apiClient = ApiClientProvider::getApiClient();
     }
 }
