@@ -16,6 +16,8 @@ declare(strict_types=1);
  */
 namespace App;
 
+use BEdita\WebTools\Command\CacheClearallCommand;
+use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
@@ -32,6 +34,21 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  */
 class Application extends BaseApplication
 {
+    /**
+     * Use `cache clear_all` from BEdita\WebTools\Command\CacheClearallCommand
+     *
+     * @param CommandCollection $commands Console commands.
+     * @return CommandCollection
+     */
+    public function console(CommandCollection $commands): CommandCollection
+    {
+        parent::console($commands);
+        $commands->remove('cache clear_all');
+        $commands->add('cache clear_all', CacheClearallCommand::class);
+
+        return $commands;
+    }
+
     /**
      * Load all the application configuration and bootstrap logic.
      *
@@ -55,6 +72,7 @@ class Application extends BaseApplication
         }
 
         // Load more plugins here
+        $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
     }
 
     /**
@@ -100,5 +118,6 @@ class Application extends BaseApplication
         } catch (MissingPluginException $e) {
             // Do not halt if the plugin is missing
         }
+        $this->addPlugin('BEdita/I18n');
     }
 }
