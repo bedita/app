@@ -15,7 +15,7 @@ declare(strict_types=1);
  */
 namespace App\View;
 
-use Cake\View\View;
+use BEdita\WebTools\View\TwigView;
 
 /**
  * Application View
@@ -24,7 +24,7 @@ use Cake\View\View;
  *
  * @link https://book.cakephp.org/4/en/views.html#the-app-view
  */
-class AppView extends View
+class AppView extends TwigView
 {
     /**
      * Initialization hook method.
@@ -37,5 +37,10 @@ class AppView extends View
      */
     public function initialize(): void
     {
+        parent::initialize();
+
+        $this->loadHelper('BEdita/WebTools.Html');
+        $this->loadHelper('BEdita/WebTools.Thumb');
+        $this->loadHelper('BEdita/I18n.I18n');
     }
 }
