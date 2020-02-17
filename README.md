@@ -1,6 +1,6 @@
-# BE4 App
+# BEdita App
 
-This is the BE4 frontend base app.
+This is the BEdita frontend base app.
 
 ## Configuration
 
