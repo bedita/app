@@ -62,10 +62,10 @@ class Application extends BaseApplication
         //       - 'create': set to `true` if the middleware is responsible of cookie creation
         //       - 'expire': used when `create` is `true` to define when the cookie must expire
         //
-        // $middlewareQueue->insertBefore(
-        //     RoutingMiddleware::class,
-        //     new I18nMiddleware((array)Configure::read('I18n', []))
-        // );
+        $middlewareQueue->insertBefore(
+            RoutingMiddleware::class,
+            new I18nMiddleware((array)Configure::read('I18n', []))
+        );
 
         return $middlewareQueue;
     }
