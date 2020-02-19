@@ -59,15 +59,32 @@ $routes->scope('/', function (RouteBuilder $builder) {
 
     /*
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
-     * its action called 'display', and we pass a param to select the view file
-     * to use (in this case, templates/Pages/home.php)...
+     * its action called 'home'
      */
-    $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+    $builder->connect(
+        '/',
+        ['controller' => 'Pages', 'action' => 'home'],
+        [
+            '_name' => 'pages:home',
+            'routeClass' => 'BEdita/I18n.I18nRoute',
+        ]
+    );
 
-    /*
-     * ...and connect the rest of 'Pages' controller's URLs.
+    /**
+     * `/:item`: Folders via folder uname/ID or static template content
+     * `/:folder/:content`: Display content inside a folder
+     *
+     * Uncomment `routeClass` to activate I18n routes
      */
-    $builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+    $builder->connect(
+        '/:item',
+        ['controller' => 'Pages', 'action' => 'index'],
+        [
+            '_name' => 'pages:index',
+            'routeClass' => 'BEdita/I18n.I18nRoute',
+        ]
+    )
+    ->setPass(['item']);
 
     /*
      * Connect catchall routes for all controllers.
@@ -82,17 +99,5 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
-    $builder->fallbacks();
+    // $builder->fallbacks();
 });
-
-/*
- * If you need a different set of middleware or none at all,
- * open new scope and define routes there.
- *
- * ```
- * $routes->scope('/api', function (RouteBuilder $builder) {
- *     // No $builder->applyMiddleware() here.
- *     // Connect API actions here.
- * });
- * ```
- */

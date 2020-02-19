@@ -2,28 +2,24 @@
 declare(strict_types=1);
 
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * BEdita, API-first content management framework
+ * Copyright 2020 ChannelWeb Srl, Chialab Srl
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     0.2.9
- * @license   https://opensource.org/licenses/mit-license.php MIT License
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 namespace App\Controller;
 
-use Cake\Core\Configure;
-use Cake\Http\Exception\ForbiddenException;
+use BEdita\SDK\BEditaClientException;
 use Cake\Http\Exception\NotFoundException;
-use Cake\Http\Response;
-use Cake\View\Exception\MissingTemplateException;
+use Cake\Utility\Hash;
 
 /**
- * Static content controller
+ * Static & folder content controller
  *
  * This controller will render views from templates/Pages/
  *
@@ -32,44 +28,57 @@ use Cake\View\Exception\MissingTemplateException;
 class PagesController extends AppController
 {
     /**
-     * Displays a view
+     * List of static template pages, each one will be served via `/{name}` or `/:lang/{name}` URL
+     * A template with the same name must exist.
      *
-     * @param array ...$path Path segments.
-     * @return \Cake\Http\Response|null
-     * @throws \Cake\Http\Exception\ForbiddenException When a directory traversal attempt.
-     * @throws \Cake\View\Exception\MissingTemplateException When the view file could not
-     *   be found and in debug mode.
-     * @throws \Cake\Http\Exception\NotFoundException When the view file could not
-     *   be found and not in debug mode.
-     * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
+     * @var array
      */
-    public function display(...$path): ?Response
+    const STATIC_TEMPLATES = [
+        'credits',
+    ];
+
+    /**
+     * Home page
+     *
+     * @return void
+     */
+    public function home(): void
     {
-        if (!$path) {
-            return $this->redirect('/');
-        }
-        if (in_array('..', $path, true) || in_array('.', $path, true)) {
-            throw new ForbiddenException();
-        }
-        $page = $subpage = null;
+    }
 
-        if (!empty($path[0])) {
-            $page = $path[0];
-        }
-        if (!empty($path[1])) {
-            $subpage = $path[1];
-        }
-        $this->set(compact('page', 'subpage'));
+    /**
+     * List contents in a folder or display static content page
+     *
+     * @param int|string $item Static page or folder id/uname.
+     * @return void
+     */
+    public function index($item): void
+    {
+        if (in_array($item, self::STATIC_TEMPLATES)) {
+            $this->viewBuilder()->setTemplate(sprintf('%s', $item));
 
+            return;
+        }
+
+        $lang = $this->getLang();
         try {
-            return $this->render(implode('/', $path));
-        } catch (MissingTemplateException $exception) {
-            if (Configure::read('debug')) {
-                throw $exception;
-            }
-            throw new NotFoundException();
+            $resp1 = $this->apiClient->getObject($item, 'folders', compact('lang'));
+            $resp2 = $this->apiClient->getRelated($item, 'folders', 'children', compact('lang'));
+        } catch (BEditaClientException $ex) {
+            throw new NotFoundException(__('Content not found'));
         }
 
-        return $this->render();
+        $folder = (array)Hash::get($resp1, 'data');
+        $children = (array)Hash::get($resp2, 'data');
+
+        $included = (array)Hash::get($resp1, 'included', []);
+        $included = array_merge($included, (array)Hash::get($resp2, 'included', []));
+        $this->set(compact('folder', 'children', 'included'));
+
+        // Load custom template if available
+        $template = sprintf('%stemplates/Pages/%s.twig', APP, $item);
+        if (file_exists($template)) {
+            $this->viewBuilder()->setTemplate($item);
+        }
     }
 }

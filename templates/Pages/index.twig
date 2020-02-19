@@ -1,0 +1,14 @@
+
+<div>
+
+    {# Display folder title, use I18n.field(folder, 'title') to get I18n content #}
+    <h2>{{ folder.attributes.title }}</h2>
+
+    {# Display folder children titles, use `child.attributes.title` if no I18n is needed #}
+    <ul>
+    {% for child in children %}
+        <li>{{ I18n.field(child, 'title') }}</li>
+    {% endfor %}
+    </ul>
+
+<div>

@@ -2,20 +2,19 @@
 declare(strict_types=1);
 
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * BEdita, API-first content management framework
+ * Copyright 2020 ChannelWeb Srl, Chialab Srl
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     0.2.9
- * @license   https://opensource.org/licenses/mit-license.php MIT License
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 namespace App\Controller;
 
+use BEdita\I18n\Core\I18nTrait;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 
@@ -29,6 +28,8 @@ use Cake\Controller\Controller;
  */
 class AppController extends Controller
 {
+    use I18nTrait;
+
     /**
      * BEdita4 API client
      *
