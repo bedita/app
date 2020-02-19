@@ -1,9 +1,9 @@
 <?php
 
+use BEdita\WebTools\Error\ExceptionRenderer;
 use Cake\Cache\Engine\FileEngine;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
-use Cake\Error\ExceptionRenderer;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
@@ -410,5 +410,44 @@ return [
     'API' => [
         'apiBaseUrl' => env('BEDITA_API'),
         'apiKey' => env('BEDITA_API_KEY', null),
+    ],
+
+    /**
+     * I18n setup.
+     *
+     *  - 'locales': array of supported locales and language code used as `prefix` like `/en`
+     *  - 'default':  default language code
+     *  - 'languages': array of supported language codes with their names
+     *  - 'lang':  language code in use (written by the application)
+     *  - 'cookie': cookie configuration to keep locale value.
+     *      - 'name': cookie name
+     *      - 'create': set to `true` if the middleware is responsible of cookie creation
+     *      - 'expire': used when `create` is `true` to define when the cookie must expire
+     *  - 'switchLangUrl': language switch URL
+     *
+     *  These config define when I18n rules are applied with `/:lang` prefix:
+     *  - 'match': array of URL paths, if there's an exact match rule is applied
+     *  - 'startWith': array of URL paths, if current URL path starts with one of these rule is applied
+     */
+    'I18n' => [
+        'locales' => [
+            'en_US' => 'en',
+            'it_IT' => 'it',
+        ],
+        'default' => 'en',
+        'languages' => [
+            'en' => 'English',
+            'it' => 'Italiano',
+        ],
+        'cookie' => [
+            'name' => 'BE4-APP',
+            'create' => true,
+        ],
+        'switchLangUrl' => '/lang',
+        'match' => [
+            '/',
+            '/credits',
+        ],
+        // 'startWith' => ['/some-url'],
     ],
 ];
