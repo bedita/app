@@ -6,8 +6,8 @@
     "license": "LGPL-3.0-or-later",
     "require": {
         "php": ">=7.2",
-        "bedita/i18n": "dev-feat/cakephp4-upgrade",
-        "bedita/web-tools": "dev-feat/cakephp4-upgrade",
+        "bedita/i18n": "^2.0",
+        "bedita/web-tools": "^2.0",
         "mobiledetect/mobiledetectlib": "^2.8"
     },
     "require-dev": {
@@ -59,6 +59,5 @@
     "prefer-stable": true,
     "config": {
         "sort-packages": true
-    },
-    "minimum-stability": "dev"
+    }
 }
