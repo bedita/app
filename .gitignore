@@ -21,7 +21,6 @@ Thumbs.db
 # Tool specific files #
 #######################
 # composer
-/composer.lock
 /composer.local.json
 # PHPUnit
 .phpunit.result.cache
