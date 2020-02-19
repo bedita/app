@@ -1,5 +1,5 @@
 {
-    "name": "bedita/be4-app",
+    "name": "bedita/bedita-app",
     "description": "BEdita 4 base WebApp",
     "homepage": "https://www.bedita.com",
     "type": "cakephp-app",
