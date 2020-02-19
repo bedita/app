@@ -2,28 +2,22 @@
 declare(strict_types=1);
 
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * BEdita, API-first content management framework
+ * Copyright 2020 ChannelWeb Srl, Chialab Srl
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     3.3.0
- * @license   https://opensource.org/licenses/mit-license.php MIT License
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 namespace App;
 
-use BEdita\WebTools\Command\CacheClearallCommand;
-use Cake\Console\CommandCollection;
+use BEdita\I18n\Middleware\I18nMiddleware;
+use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
-use Cake\Core\Exception\MissingPluginException;
-use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\BaseApplication;
 use Cake\Http\MiddlewareQueue;
-use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
 /**
@@ -35,43 +29,15 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 class Application extends BaseApplication
 {
     /**
-     * Use `cache clear_all` from BEdita\WebTools\Command\CacheClearallCommand
-     *
-     * @param CommandCollection $commands Console commands.
-     * @return CommandCollection
-     */
-    public function console(CommandCollection $commands): CommandCollection
-    {
-        parent::console($commands);
-        $commands->remove('cache clear_all');
-        $commands->add('cache clear_all', CacheClearallCommand::class);
-
-        return $commands;
-    }
-
-    /**
      * Load all the application configuration and bootstrap logic.
      *
      * @return void
      */
     public function bootstrap(): void
     {
-        // Call parent to load bootstrap from files.
         parent::bootstrap();
 
-        if (PHP_SAPI === 'cli') {
-            $this->bootstrapCli();
-        }
-
-        /*
-         * Only try to load DebugKit in development mode
-         * Debug Kit should not be installed on a production system
-         */
-        if (Configure::read('debug')) {
-            $this->addPlugin('DebugKit');
-        }
-
-        // Load more plugins here
+        // Load 'BEdita/WebTools' and other plugins here
         $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
     }
 
@@ -83,23 +49,23 @@ class Application extends BaseApplication
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
-        $middlewareQueue
-            // Catch any exceptions in the lower layers,
-            // and make an error page/response
-            ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
+        $middlewareQueue = parent::middleware($middlewareQueue);
 
-            // Handle plugin/theme assets like CakePHP normally does.
-            ->add(new AssetMiddleware([
-                'cacheTime' => Configure::read('Asset.cacheTime'),
-            ]))
-
-            // Add routing middleware.
-            // If you have a large number of routes connected, turning on routes
-            // caching in production could improve performance. For that when
-            // creating the middleware instance specify the cache config name by
-            // using it's second constructor argument:
-            // `new RoutingMiddleware($this, '_cake_routes_')`
-            ->add(new RoutingMiddleware($this));
+        // Add I18n middleware.
+        // Define when I18n rules are applied with `/:lang` prefix:
+        //   - 'match': array of URL paths, if there's an exact match rule is applied
+        //   - 'startWith': array of URL paths, if current URL path starts with one of these rule is applied
+        //   - 'switchLangUrl': reserved URL (for example `/lang`) used to switch language and redirect to referer URL.
+        //                      Disabled by default.
+        //   - 'cookie': array for cookie that keeps the locale value. By default no cookie is used.
+        //       - 'name': cookie name
+        //       - 'create': set to `true` if the middleware is responsible of cookie creation
+        //       - 'expire': used when `create` is `true` to define when the cookie must expire
+        //
+        // $middlewareQueue->insertBefore(
+        //     RoutingMiddleware::class,
+        //     new I18nMiddleware((array)Configure::read('I18n', []))
+        // );
 
         return $middlewareQueue;
     }
@@ -113,11 +79,7 @@ class Application extends BaseApplication
      */
     protected function bootstrapCli(): void
     {
-        try {
-            $this->addPlugin('Bake');
-        } catch (MissingPluginException $e) {
-            // Do not halt if the plugin is missing
-        }
+        parent::bootstrapCli();
         $this->addPlugin('BEdita/I18n');
     }
 }
