@@ -51,21 +51,23 @@ class Application extends BaseApplication
     {
         $middlewareQueue = parent::middleware($middlewareQueue);
 
-        // Add I18n middleware.
-        // Define when I18n rules are applied with `/:lang` prefix:
-        //   - 'match': array of URL paths, if there's an exact match rule is applied
-        //   - 'startWith': array of URL paths, if current URL path starts with one of these rule is applied
-        //   - 'switchLangUrl': reserved URL (for example `/lang`) used to switch language and redirect to referer URL.
-        //                      Disabled by default.
-        //   - 'cookie': array for cookie that keeps the locale value. By default no cookie is used.
-        //       - 'name': cookie name
-        //       - 'create': set to `true` if the middleware is responsible of cookie creation
-        //       - 'expire': used when `create` is `true` to define when the cookie must expire
-        //
-        $middlewareQueue->insertBefore(
-            RoutingMiddleware::class,
-            new I18nMiddleware((array)Configure::read('I18n', []))
-        );
+        /**
+         *  Uncomment to add I18n middleware.
+         *
+         *  Define when I18n rules are applied with `/:lang` prefix:
+         *    - 'match': array of URL paths, if there's an exact match rule is applied
+         *    - 'startWith': array of URL paths, if current URL path starts with one of these rule is applied
+         *    - 'switchLangUrl': reserved URL (for example `/lang`) used to switch language and redirect to referer URL.
+         *               Disabled by default.
+         *    - 'cookie': array for cookie that keeps the locale value. By default no cookie is used.
+         *       - 'name': cookie name
+         *       - 'create': set to `true` if the middleware is responsible of cookie creation
+         *       - 'expire': used when `create` is `true` to define when the cookie must expire
+         */
+        // $middlewareQueue->insertBefore(
+        //     RoutingMiddleware::class,
+        //     new I18nMiddleware((array)Configure::read('I18n', []))
+        // );
 
         return $middlewareQueue;
     }

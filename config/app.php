@@ -429,25 +429,25 @@ return [
      *  - 'match': array of URL paths, if there's an exact match rule is applied
      *  - 'startWith': array of URL paths, if current URL path starts with one of these rule is applied
      */
-    'I18n' => [
-        'locales' => [
-            'en_US' => 'en',
-            'it_IT' => 'it',
-        ],
-        'default' => 'en',
-        'languages' => [
-            'en' => 'English',
-            'it' => 'Italiano',
-        ],
-        'cookie' => [
-            'name' => 'BE4-APP',
-            'create' => true,
-        ],
-        'switchLangUrl' => '/lang',
-        'match' => [
-            '/',
-            '/credits',
-        ],
-        // 'startWith' => ['/some-url'],
-    ],
+    // 'I18n' => [
+    //     'locales' => [
+    //         'en_US' => 'en',
+    //         'it_IT' => 'it',
+    //     ],
+    //     'default' => 'en',
+    //     'languages' => [
+    //         'en' => 'English',
+    //         'it' => 'Italiano',
+    //     ],
+    //     'cookie' => [
+    //         'name' => 'BE4-APP',
+    //         'create' => true,
+    //     ],
+    //     'switchLangUrl' => '/lang',
+    //     'match' => [
+    //         '/',
+    //         '/credits',
+    //     ],
+    //     'startWith' => ['/some-url'],
+    // ],
 ];

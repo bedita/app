@@ -60,13 +60,15 @@ $routes->scope('/', function (RouteBuilder $builder) {
     /*
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
      * its action called 'home'
+     *
+     * Uncomment `routeClass` to activate I18n routes
      */
     $builder->connect(
         '/',
         ['controller' => 'Pages', 'action' => 'home'],
         [
             '_name' => 'pages:home',
-            'routeClass' => 'BEdita/I18n.I18nRoute',
+            // 'routeClass' => 'BEdita/I18n.I18nRoute',
         ]
     );
 
@@ -81,7 +83,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
         ['controller' => 'Pages', 'action' => 'index'],
         [
             '_name' => 'pages:index',
-            'routeClass' => 'BEdita/I18n.I18nRoute',
+            // 'routeClass' => 'BEdita/I18n.I18nRoute',
         ]
     )
     ->setPass(['item']);
