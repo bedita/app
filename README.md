@@ -39,8 +39,23 @@ Read and edit the environment specific in `config/.env` in particular:
 
 Other environment agnostic settings can be changed in `config/app.php`.
 
+You may then check `http://localhost:8765/credits` or `http://localhost:8765/{folder}` where `{folder}` is a folder uname on you BEdita4 project.
+
 ## Layout
 
 The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
 framework by default. You can, however, replace it with any other library or
 custom styles.
+
+## I18n
+
+Internationalization behavior is not enabled by default.
+
+To activate:
+
+* in `config/app.php` uncomment `I18n` key and setup your wanted configuration
+* in `src/Application.php` uncomment lines to add `I18nMiddleware` in `::middleware()` method
+* in `config/routes.php` ucomment lines with `'routeClass' => 'BEdita/I18n.I18nRoute'` to enable routing rules
+
+After that evey URL path will have a language prefix like `/en` automatically generated.
+Using `I18nHelper` methods you may then handle URLs or object properties accordingly.
