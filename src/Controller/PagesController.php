@@ -17,6 +17,7 @@ namespace App\Controller;
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 /**
  * Static & folder content controller
@@ -76,7 +77,7 @@ class PagesController extends AppController
         $this->set(compact('folder', 'children', 'included'));
 
         // Load custom template if available
-        $template = sprintf('%stemplates/Pages/%s.twig', APP, $item);
+        $template = sprintf('%s/templates/Pages/%s.twig', ROOT, Inflector::underscore($item));
         if (file_exists($template)) {
             $this->viewBuilder()->setTemplate($item);
         }
