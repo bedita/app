@@ -1,4 +1,4 @@
-# Ny App
+# My App
 
 This is the a web app based on BEdita web app.
 
