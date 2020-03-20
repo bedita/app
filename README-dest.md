@@ -1,20 +1,11 @@
 # My App
 
-This is the a web app based on BEdita web app.
+This is the web app based on BEdita web app.
 
 ## Requirements
 
 1. PHP >= 7.2
 1. Download latest [Composer](https://getcomposer.org/doc/00-intro.md) or update via `composer self-update`.
-
-## Setup folders
-
-Check logs and tmp folder permissions.
-
-```bash
-sudo chown -R user:www tmp logs
-sudo chmod g+w -R user:www tmp logs
-```
 
 ## Install dependencies
 
@@ -23,8 +14,18 @@ Install composer dependencies.
 ```bash
 composer install
 ```
+## Setup folders
 
-Afterwards, cleanup cache as follows:
+Check logs and tmp folder permissions: web server group should have permits to write.
+If it doesn't, adjust permits. I.e.:
+
+```bash
+sudo chmod g+w -R user:www logs tmp
+```
+
+## Start web app
+
+Cleanup cache as follows:
 
 ```bash
 bin/cake cache clear_all
