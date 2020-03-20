@@ -20,7 +20,8 @@ Check logs and tmp folder permissions: web server group should have permits to w
 If it doesn't, adjust permits. I.e.:
 
 ```bash
-sudo chmod g+w -R user:www logs tmp
+sudo chown -R user:www logs tmp
+sudo chmod g+w -R logs tmp
 ```
 
 ## Start web app
