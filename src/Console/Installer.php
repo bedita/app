@@ -120,8 +120,7 @@ class Installer
             return;
         }
         $readme = sprintf('%s/README.md', $dir);
-        copy($readmeTemplate, $readme);
-        unlink($readmeTemplate);
+        rename($readmeTemplate, $readme);
         $io->write('`README.md` file overridden');
     }
 
