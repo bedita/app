@@ -66,7 +66,6 @@ class Installer
         static::setFolderPermissions($rootDir, $io);
         static::setSecuritySalt($rootDir, $io);
 
-
         $class = 'Cake\Codeception\Console\Installer';
         if (class_exists($class)) {
             $class::customizeCodeceptionBinary($event);
