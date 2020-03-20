@@ -107,7 +107,8 @@ class Installer
     }
 
     /**
-     * Copy README-dest.md into README.md
+     * If README-dest.md doesn't exist, skip.
+     * Move README-dest.md into README.md otherwise.
      *
      * @param string $dir The application's root directory.
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
