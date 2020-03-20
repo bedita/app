@@ -16,13 +16,8 @@ composer install
 ```
 ## Setup folders
 
-Check logs and tmp folder permissions: web server group should have permits to write.
-If it doesn't, adjust permits. I.e.:
-
-```bash
-sudo chown -R user:www logs tmp
-sudo chmod g+w -R logs tmp
-```
+Logs and tmp folder permissions should be fine (`composer install` deals with them).
+For further details about permissions in cakephp, look at https://book.cakephp.org/4/en/installation.html#permissions
 
 ## Start web app
 
