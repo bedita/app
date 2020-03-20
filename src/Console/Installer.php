@@ -115,9 +115,13 @@ class Installer
      */
     public static function createReadme($dir, $io)
     {
-        $readme = sprintf('%s/README.md', $dir);
         $readmeTemplate = sprintf('%s/README-dest.md', $dir);
+        if (!file_exists($readmeTemplate)) {
+            return;
+        }
+        $readme = sprintf('%s/README.md', $dir);
         copy($readmeTemplate, $readme);
+        unlink($readmeTemplate);
         $io->write('`README.md` file overridden');
     }
 
