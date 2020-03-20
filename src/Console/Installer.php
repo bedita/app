@@ -60,10 +60,12 @@ class Installer
 
         static::createAppLocalConfig($rootDir, $io);
         static::createDotEnv($rootDir, $io);
+        static::createReadme($rootDir, $io);
         static::createWritableDirectories($rootDir, $io);
 
         static::setFolderPermissions($rootDir, $io);
         static::setSecuritySalt($rootDir, $io);
+
 
         $class = 'Cake\Codeception\Console\Installer';
         if (class_exists($class)) {
@@ -103,6 +105,21 @@ class Installer
             copy($appDotEnvTemplate, $appDotEnv);
             $io->write('Created `config/.env` file');
         }
+    }
+
+    /**
+     * Copy README-dest.md into README.md
+     *
+     * @param string $dir The application's root directory.
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return void
+     */
+    public static function createReadme($dir, $io)
+    {
+        $readme = sprintf('%s/README.md', $dir);
+        $readmeTemplate = sprintf('%s/README-dest.md', $dir);
+        copy($readmeTemplate, $readme);
+        $io->write('`README.md` file overridden');
     }
 
     /**
