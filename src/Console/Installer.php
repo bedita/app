@@ -52,7 +52,7 @@ class Installer
      * @throws \Exception Exception raised by validator.
      * @return void
      */
-    public static function postInstall(Event $event)
+    public static function postInstall(Event $event): void
     {
         $io = $event->getIO();
 
@@ -60,7 +60,6 @@ class Installer
 
         static::createAppLocalConfig($rootDir, $io);
         static::createDotEnv($rootDir, $io);
-        static::createReadme($rootDir, $io);
         static::createWritableDirectories($rootDir, $io);
 
         static::setFolderPermissions($rootDir, $io);
@@ -70,6 +69,20 @@ class Installer
         if (class_exists($class)) {
             $class::customizeCodeceptionBinary($event);
         }
+    }
+
+    /**
+     * Handle post creationg tasks.
+     *
+     * @param \Composer\Script\Event $event The composer event object.
+     * @throws \Exception Exception raised by validator.
+     * @return void
+     */
+    public static function postCreateProject(Event $event): void
+    {
+        $io = $event->getIO();
+        $rootDir = dirname(dirname(__DIR__));
+        static::createReadme($rootDir, $io);
     }
 
     /**
