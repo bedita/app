@@ -34,7 +34,7 @@ class PagesController extends AppController
      *
      * @var array
      */
-    const STATIC_TEMPLATES = [
+    public const STATIC_TEMPLATES = [
         'credits',
     ];
 
