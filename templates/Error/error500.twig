@@ -1,0 +1,23 @@
+{% do _view.setLayout('error') %}
+
+<h2>{{ __('An Internal Error Has Occurred') }}</h2>
+<p class="error">
+    <strong>{{ __('Error') }} </strong>
+    {{ message }}
+</p>
+
+{% if config('debug') %}
+
+    {% if error %}
+        <p class="error">
+            <strong>Error in: </strong>
+            {{ error.getFile }}, line {{ error.getLine }}
+        </p>
+
+        <p class="notice">
+            <h3>Stack trace</h3>
+            {{ error.getTraceAsString()|nl2br }}
+        </p>
+    {% endif %}
+
+{% endif %}

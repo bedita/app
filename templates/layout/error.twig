@@ -9,14 +9,15 @@
     {{ Html.css('milligram.min')|raw }}
     {{ Html.css('cake')|raw }}
 
-    {{ _view.fetch('meta')|raw }}
-    {{ _view.fetch('css')|raw }}
-    {{ _view.fetch('script')|raw }}
+    {{ fetch('meta') }}
+    {{ fetch('css') }}
+    {{ fetch('script') }}
 </head>
 <body>
+
     <div class="error-container">
         {{ Flash.render()|raw }}
-        {{ _view.fetch('content')|raw }}
+        {{ fetch('content') }}
         {{ Html.link(__('Back'), 'javascript:history.back()')|raw }}
     </div>
 </body>

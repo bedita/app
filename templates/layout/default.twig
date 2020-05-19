@@ -9,12 +9,12 @@
     {{ Html.css('milligram.min')|raw }}
     {{ Html.css('cake')|raw }}
 
-    {{ _view.fetch('meta')|raw }}
-    {{ _view.fetch('css')|raw }}
-    {{ _view.fetch('script')|raw }}
+    {{ fetch('meta') }}
+    {{ fetch('css') }}
+    {{ fetch('script') }}
 </head>
 <body>
     {{ Flash.render()|raw }}
-    {{ _view.fetch('content')|raw }}
+    {{ fetch('content') }}
 </body>
 </html>

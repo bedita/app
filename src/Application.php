@@ -14,10 +14,13 @@ declare(strict_types=1);
  */
 namespace App;
 
-use BEdita\I18n\Middleware\I18nMiddleware;
-use BEdita\WebTools\BaseApplication;
 use Cake\Core\Configure;
+use Cake\Core\Exception\MissingPluginException;
+use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Cake\Http\BaseApplication;
+use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\MiddlewareQueue;
+use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
 /**
@@ -35,10 +38,28 @@ class Application extends BaseApplication
      */
     public function bootstrap(): void
     {
+        // Call parent to load bootstrap from files.
         parent::bootstrap();
 
+        if (PHP_SAPI === 'cli') {
+            $this->bootstrapCli();
+        }
+
+        /*
+         * Only try to load DebugKit in development mode
+         * Debug Kit should not be installed on a production system
+         */
+        if (Configure::read('debug')) {
+            $this->addPlugin('DebugKit');
+        }
+
         // Load 'BEdita/WebTools' and other plugins here
-        $this->addPlugin('BEdita/WebTools', ['bootstrap' => true]);
+        $this->addPlugin('BEdita/WebTools');
+        $this->addPlugin('BEdita/I18n');
+
+        \BEdita\WebTools\Utility\AssetsRevisions::setStrategy(
+            new \BEdita\WebTools\Utility\Asset\Strategy\EntrypointsStrategy()
+        );
     }
 
     /**
@@ -49,25 +70,28 @@ class Application extends BaseApplication
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
-        $middlewareQueue = parent::middleware($middlewareQueue);
+        $middlewareQueue
+            // Catch any exceptions in the lower layers,
+            // and make an error page/response
+            ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
 
-        /**
-         *  Uncomment to add I18n middleware.
-         *
-         *  Define when I18n rules are applied with `/:lang` prefix:
-         *    - 'match': array of URL paths, if there's an exact match rule is applied
-         *    - 'startWith': array of URL paths, if current URL path starts with one of these rule is applied
-         *    - 'switchLangUrl': reserved URL (for example `/lang`) used to switch language and redirect to referer URL.
-         *               Disabled by default.
-         *    - 'cookie': array for cookie that keeps the locale value. By default no cookie is used.
-         *       - 'name': cookie name
-         *       - 'create': set to `true` if the middleware is responsible of cookie creation
-         *       - 'expire': used when `create` is `true` to define when the cookie must expire
-         */
-        // $middlewareQueue->insertBefore(
-        //     RoutingMiddleware::class,
-        //     new I18nMiddleware((array)Configure::read('I18n', []))
-        // );
+            // Handle plugin/theme assets like CakePHP normally does.
+            ->add(new AssetMiddleware([
+                'cacheTime' => Configure::read('Asset.cacheTime'),
+            ]))
+
+            // Add routing middleware.
+            // If you have a large number of routes connected, turning on routes
+            // caching in production could improve performance. For that when
+            // creating the middleware instance specify the cache config name by
+            // using it's second constructor argument:
+            // `new RoutingMiddleware($this, '_cake_routes_')`
+            ->add(new RoutingMiddleware($this))
+
+            // Parse various types of encoded request bodies so that they are
+            // available as array through $request->getData()
+            // https://book.cakephp.org/4/en/controllers/middleware.html#body-parser-middleware
+            ->add(new BodyParserMiddleware());
 
         return $middlewareQueue;
     }
@@ -81,7 +105,14 @@ class Application extends BaseApplication
      */
     protected function bootstrapCli(): void
     {
-        parent::bootstrapCli();
-        $this->addPlugin('BEdita/I18n');
+        try {
+            $this->addPlugin('Bake');
+        } catch (MissingPluginException $e) {
+            // Do not halt if the plugin is missing
+        }
+
+        $this->addPlugin('Migrations');
+
+        // Load more plugins here
     }
 }
