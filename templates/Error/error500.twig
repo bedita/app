@@ -6,18 +6,4 @@
     {{ message }}
 </p>
 
-{% if config('debug') %}
-
-    {% if error %}
-        <p class="error">
-            <strong>Error in: </strong>
-            {{ error.getFile }}, line {{ error.getLine }}
-        </p>
-
-        <p class="notice">
-            <h3>Stack trace</h3>
-            {{ error.getTraceAsString()|nl2br }}
-        </p>
-    {% endif %}
-
-{% endif %}
+{{ element('error_detail') }}

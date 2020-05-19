@@ -6,8 +6,7 @@
     <title>BEdita4 Error Page</title>
     {{ Html.meta('icon')|raw }}
 
-    {{ Html.css('milligram.min')|raw }}
-    {{ Html.css('cake')|raw }}
+    {{ Html.css(['normalize.min', 'milligram.min', 'cake'])|raw }}
 
     {{ fetch('meta') }}
     {{ fetch('css') }}

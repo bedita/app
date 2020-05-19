@@ -6,8 +6,7 @@
     <title>BEdita4 Web App</title>
     {{ Html.meta('icon')|raw }}
 
-    {{ Html.css('milligram.min')|raw }}
-    {{ Html.css('cake')|raw }}
+    {{ Html.css(['normalize.min', 'milligram.min', 'cake'])|raw }}
 
     {{ fetch('meta') }}
     {{ fetch('css') }}
@@ -16,5 +15,6 @@
 <body>
     {{ Flash.render()|raw }}
     {{ fetch('content') }}
+    {{ fetch('scriptBottom') }}
 </body>
 </html>
