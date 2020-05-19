@@ -450,4 +450,16 @@ return [
     //     ],
     //     'startWith' => ['/some-url'],
     // ],
+
+    /**
+     * Twig setup.
+     *
+     * Custom Twig Environment configuration.
+     * @see https://twig.symfony.com/doc/3.x/api.html#environment-options
+     */
+    // 'Twig' => [
+    //     'environment' => [
+    //         'strict_variables' => true,
+    //     ],
+    // ],
 ];
