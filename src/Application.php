@@ -57,9 +57,14 @@ class Application extends BaseApplication
         $this->addPlugin('BEdita/WebTools');
         $this->addPlugin('BEdita/I18n');
 
-        \BEdita\WebTools\Utility\AssetsRevisions::setStrategy(
-            new \BEdita\WebTools\Utility\Asset\Strategy\EntrypointsStrategy()
-        );
+        /*
+         * Uncomment to setup AssetsRevisions with an appropriate strategy.
+         *
+         * @see https://github.com/bedita/web-tools#load-assets-with-assetrevisions
+         */
+        // \BEdita\WebTools\Utility\AssetsRevisions::setStrategy(
+        //     new \BEdita\WebTools\Utility\Asset\Strategy\EntrypointsStrategy()
+        // );
     }
 
     /**
