@@ -53,6 +53,12 @@ The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
 framework by default. You can, however, replace it with any other library or
 custom styles.
 
+## TwigView
+
+The app uses `BEdita\WebTools\TwigView` (that extends [`Cake\TwigView`](https://github.com/cakephp/twig-view)) as `AppView`.
+
+You can customize [Twig Environment](https://twig.symfony.com/doc/3.x/api.html#environment-options) uncommenting `Twig` key in `config/app.php`.
+
 ## I18n
 
 Internationalization behavior is not enabled by default.
@@ -60,8 +66,23 @@ Internationalization behavior is not enabled by default.
 To activate:
 
 * in `config/app.php` uncomment `I18n` key and setup your wanted configuration
-* in `src/Application.php` uncomment lines to add `I18nMiddleware` in `::middleware()` method
-* in `config/routes.php` ucomment lines with `'routeClass' => 'BEdita/I18n.I18nRoute'` to enable routing rules
+* in `src/Application.php` load `BEdita/I18n` plugin with middleware enabled
+  ```php
+  $this->addPlugin('BEdita/I18n', ['middleware' => true]);
+  ```
+* in `config/routes.php` uncomment lines with `'routeClass' => 'BEdita/I18n.I18nRoute'` to enable routing rules
 
 After that evey URL path will have a language prefix like `/en` automatically generated.
 Using `I18nHelper` methods you may then handle URLs or object properties accordingly.
+
+## Setup AssetsRevisions
+
+In order to handle assets revisions uncomment in `src/Application.php` the following rows in `boostrap()` method:
+
+```php
+\BEdita\WebTools\Utility\AssetsRevisions::setStrategy(
+    new \BEdita\WebTools\Utility\Asset\Strategy\EntrypointsStrategy()
+);
+```
+
+For more information about assets revisions and strategies to adopt see [here](https://github.com/bedita/web-tools#load-assets-with-assetrevisions).
