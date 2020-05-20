@@ -55,6 +55,7 @@ class Application extends BaseApplication
 
         // Load 'BEdita/WebTools' and other plugins here
         $this->addPlugin('BEdita/WebTools');
+        // To activate I18nMiddleware use $this->addPlugin('BEdita/I18n', ['middleware' => true]);
         $this->addPlugin('BEdita/I18n');
 
         /*
