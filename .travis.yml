@@ -7,6 +7,7 @@ language: php
 
 env:
   global:
+    - APP_NAME=__TEST_APP_NAME__
     - BEDITA_API_KEY=12345
     - BEDITA_API=http://127.0.0.1:8080
     - BEDITA_ADMIN_USR=admin
