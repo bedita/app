@@ -1,0 +1,9 @@
+{% do _view.setLayout('error') %}
+
+<h2>{{ __('An Internal Error Has Occurred') }}</h2>
+<p class="error">
+    <strong>{{ __('Error') }} </strong>
+    {{ message }}
+</p>
+
+{{ element('error_detail') }}

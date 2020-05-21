@@ -1,0 +1,8 @@
+{% do _view.setLayout('error') %}
+
+<h2>{{ message }}</h2>
+<p class="error">
+    <strong>{{ __('Error') }} {{ error.code }}</strong>
+</p>
+
+{{ element('error_detail') }}

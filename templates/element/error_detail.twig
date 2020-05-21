@@ -1,0 +1,13 @@
+{% if config('debug') %}
+    {% if error %}
+        <p class="error">
+            <strong>Error in: </strong>
+            {{ error.getFile }}, line {{ error.getLine }}
+        </p>
+        <p>
+            <h4>Stack trace</h4>
+            <code>{{ error.getTraceAsString()|nl2br }}</code>
+        </p>
+    {% endif %}
+
+{% endif %}

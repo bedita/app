@@ -18,6 +18,14 @@ declare(strict_types=1);
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 
+if (!getenv('BEDITA_API') && file_exists(dirname(__DIR__) . '/tests/.env')) {
+    $dotenv = new \josegonzalez\Dotenv\Loader([dirname(__DIR__) . '/tests/.env']);
+    $dotenv->parse()
+        ->putenv()
+        ->toEnv()
+        ->toServer();
+}
+
 /**
  * Test runner bootstrap.
  *

@@ -1,0 +1,4 @@
+{% set content = explode("\n", content) %}
+{% for line in content %}
+    <p>{{ line }}</p>
+{% endfor %}

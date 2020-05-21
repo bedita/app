@@ -1,0 +1,7 @@
+<div class="message error" onclick="this.classList.add('hidden')">
+{% if params.escape|default(true) is same as(false) %}
+    {{ message|raw }}
+{% else %}
+    {{ message }}
+{% endif %}
+</div>

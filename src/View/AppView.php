@@ -39,6 +39,7 @@ class AppView extends TwigView
     {
         parent::initialize();
 
+        $this->loadHelper('Flash');
         $this->loadHelper('BEdita/WebTools.Html');
         $this->loadHelper('BEdita/WebTools.Thumb');
         $this->loadHelper('BEdita/I18n.I18n');
