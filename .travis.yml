@@ -24,6 +24,7 @@ before_install:
 install:
   # Install Composer dependencies.
   - composer install --prefer-dist --no-interaction
+  - composer run-script post-install-cmd --no-interaction
 
 script:
   # Run PHPUnit with coverage.
