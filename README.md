@@ -1,4 +1,5 @@
 # BEdita App
+[![Build Status](https://travis-ci.com/bedita/app.svg?branch=master)](https://travis-ci.com/bedita/app)
 
 This is the BEdita skeleton web app.
 
