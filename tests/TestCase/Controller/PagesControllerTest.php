@@ -2,125 +2,133 @@
 declare(strict_types=1);
 
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * BEdita, API-first content management framework
+ * Copyright 2020 ChannelWeb Srl, Chialab Srl
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         1.2.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 namespace App\Test\TestCase\Controller;
 
-use Cake\Core\Configure;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * PagesControllerTest class
  *
- * @uses \App\Controller\PagesController
+ * {@see \App\Controller\PagesController} Test Case
+ *
+ * @coversDefaultClass \App\Controller\PagesController
  */
 class PagesControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
     /**
-     * testMultipleGet method
+     * Instance of BEditaClient
      *
-     * @return void
+     * @var \BEdita\SDK\BEditaClient
      */
-    public function testMultipleGet()
+    protected $apiClient = null;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp(): void
     {
-        $this->get('/');
-        $this->assertResponseOk();
-        $this->get('/');
-        $this->assertResponseOk();
+        parent::setUp();
+
+        $this->apiClient = ApiClientProvider::getApiClient();
+        $response = $this->apiClient->authenticate(env('BEDITA_ADMIN_USR'), env('BEDITA_ADMIN_PWD'));
+        $this->apiClient->setupTokens($response['meta']);
     }
 
     /**
-     * testDisplay method
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function testDisplay()
+    public function tearDown(): void
     {
-        $this->get('/pages/home');
-        $this->assertResponseOk();
-        $this->assertResponseContains('CakePHP');
-        $this->assertResponseContains('<html>');
+        parent::tearDown();
+
+        $this->apiClient = null;
     }
 
     /**
-     * Test that missing template renders 404 page in production
+     * Test home() method
      *
      * @return void
+     *
+     * @covers ::home()
      */
-    public function testMissingTemplate()
+    public function testHome(): void
     {
-        Configure::write('debug', false);
-        $this->get('/pages/not_existing');
+        $this->get('/');
+        $this->assertResponseOk();
+        $this->assertLayout('default');
+        $this->assertTemplate('home');
+        $this->assertResponseContains('BEdita4 sample Web App');
+    }
 
+    /**
+     * Test index() method with static template
+     *
+     * @return void
+     *
+     * @covers ::index()
+     */
+    public function testIndexStaticTemplate(): void
+    {
+        $this->get('/credits');
+        $this->assertResponseOk();
+        $this->assertLayout('default');
+        $this->assertTemplate('credits');
+        $this->assertResponseContains('Created by Gustavo');
+    }
+
+    /**
+     * Test index() method with not found content
+     *
+     * @return void
+     *
+     * @covers ::index()
+     */
+    public function testIndexNotFound(): void
+    {
+        $this->get('/supporto');
         $this->assertResponseError();
-        $this->assertResponseContains('Error');
+        $this->assertLayout('error');
+        $this->assertTemplate('error400');
+        $this->assertResponseContains('Content not found');
     }
 
     /**
-     * Test that missing template in debug mode renders missing_template error page
+     * Test index method()
      *
      * @return void
-     */
-    public function testMissingTemplateInDebug()
-    {
-        Configure::write('debug', true);
-        $this->get('/pages/not_existing');
-
-        $this->assertResponseFailure();
-        $this->assertResponseContains('Missing Template');
-        $this->assertResponseContains('Stacktrace');
-        $this->assertResponseContains('not_existing.php');
-    }
-
-    /**
-     * Test directory traversal protection
      *
-     * @return void
+     * @covers ::index()
      */
-    public function testDirectoryTraversalProtection()
+    public function testIndex(): void
     {
-        $this->get('/pages/../Layout/ajax');
-        $this->assertResponseCode(403);
-        $this->assertResponseContains('Forbidden');
-    }
+        $res = $this->apiClient->save('folders', ['title' => 'Secrets of Gustavo']);
+        $uname = Hash::get($res, 'data.attributes.uname');
 
-    /**
-     * Test that CSRF protection is applied to page rendering.
-     *
-     * @reutrn void
-     */
-    public function testCsrfAppliedError()
-    {
-        $this->post('/pages/home', ['hello' => 'world']);
+        $this->get(sprintf('/%s', $uname));
+        $this->assertResponseOk();
+        $this->assertLayout('default');
+        $this->assertTemplate('index');
 
-        $this->assertResponseCode(403);
-        $this->assertResponseContains('CSRF');
-    }
-
-    /**
-     * Test that CSRF protection is applied to page rendering.
-     *
-     * @reutrn void
-     */
-    public function testCsrfAppliedOk()
-    {
-        $this->enableCsrfToken();
-        $this->post('/pages/home', ['hello' => 'world']);
-
-        $this->assertResponseCode(200);
-        $this->assertResponseContains('CakePHP');
+        $folder = $this->viewVariable('folder');
+        $children = $this->viewVariable('children');
+        $included = $this->viewVariable('included');
+        $this->assertResponseContains(Hash::get($folder, 'attributes.title'));
+        static::assertEquals([], $children);
+        static::assertEquals([], $included);
     }
 }
