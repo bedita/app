@@ -60,6 +60,15 @@ $routes->scope('/', function (RouteBuilder $builder) {
      */
     $builder->applyMiddleware('csrf');
 
+    /**
+     * Here, we are connecting '/api' path to proxy requests directly to BEdita4 API.
+     * Uncomment all or single HTTP method you want if you need this functionality.
+     */
+    // $builder->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $builder) {
+    //     // This route's name will be `api:get`
+    //     $builder->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
+    // });
+
     /*
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
      * its action called 'home'
