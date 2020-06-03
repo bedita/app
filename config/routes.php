@@ -66,8 +66,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
      */
     // $builder->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $builder) {
     //     // This route's name will be `api:get`
-    //     $builder->get('/:endpoint/**', ['controller' => 'Api', 'action' => 'get'], 'get')
-    //         ->setPass(['endpoint']);
+    //     $builder->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
     // });
 
     /*

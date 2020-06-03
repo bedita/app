@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.2",
         "bedita/i18n": "^3.0.1",
-        "bedita/web-tools": "^3.0.1",
+        "bedita/web-tools": "^3.1.0",
         "cakephp/plugin-installer": "^1.2",
         "mobiledetect/mobiledetectlib": "^2.8"
     },
