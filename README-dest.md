@@ -86,3 +86,30 @@ In order to handle assets revisions uncomment in `src/Application.php` the follo
 ```
 
 For more information about assets revisions and strategies to adopt see [here](https://github.com/bedita/web-tools#load-assets-with-assetrevisions).
+
+## Enable Proxy to BEdita 4 API
+
+Often you could need to query BEdita 4 API directly from Javascript without create specific routing rules and controller's actions. You can reach that goal enabling routing for `ApiController`.
+
+`ApiController` uses `\BEdita\WebTools\Controller\ApiProxyTrait` to transparently delegate requests
+from your app to BEdita 4 API.
+
+Uncomment the routing rules you can find in `config/routes.php`
+
+```php
+$builder->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $builder) {
+    // This route's name will be `api:get`
+    $builder->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
+});
+```
+
+and the app will be ready. Every request to `/api/*` will be sent to the API and the json raw response
+will be returned at the client.
+
+So
+
+```http
+GET /api/users?filter[name]=gustavo
+```
+
+will return the API response from `GET /users?filter[name]=gustavo`.
