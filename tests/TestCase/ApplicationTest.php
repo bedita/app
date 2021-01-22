@@ -40,7 +40,6 @@ class ApplicationTest extends TestCase
      * testBootstrap
      *
      * @return void
-     *
      * @covers ::bootstrap()
      * @covers ::bootstrapCli()
      */

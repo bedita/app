@@ -16,11 +16,12 @@ declare(strict_types=1);
  */
 namespace App\Command;
 
+use Cake\Command\Command;
 use Cake\Console\Arguments;
-use Cake\Console\Command;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Log\Log;
+use Psy\Configuration as PsyConfiguration;
 use Psy\Shell as PsyShell;
 
 /**
@@ -51,7 +52,7 @@ class ConsoleCommand extends Command
             return static::CODE_ERROR;
         }
 
-        $io->out("You can exit with <info>`CTRL-C`</info> or <info>`exit`</info>");
+        $io->out('You can exit with <info>`CTRL-C`</info> or <info>`exit`</info>');
         $io->out('');
 
         Log::drop('debug');
@@ -60,7 +61,9 @@ class ConsoleCommand extends Command
         restore_error_handler();
         restore_exception_handler();
 
-        $psy = new PsyShell();
+        $psy = new PsyShell(new PsyConfiguration([
+            'updateCheck' => 'never',
+        ]));
         $psy->run();
     }
 
