@@ -77,9 +77,9 @@ class PagesController extends AppController
         $this->set(compact('folder', 'children', 'included'));
 
         // Load custom template if available
-        $template = sprintf('%s/templates/Pages/%s.twig', ROOT, Inflector::underscore($item));
+        $template = sprintf('%s/templates/Pages/%s.twig', ROOT, Inflector::underscore((string)$item));
         if (file_exists($template)) {
-            $this->viewBuilder()->setTemplate($item);
+            $this->viewBuilder()->setTemplate((string)$item);
         }
     }
 }

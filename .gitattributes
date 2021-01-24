@@ -30,11 +30,14 @@
 # Denote all files that are truly binary and should not be modified.
 *.png binary
 *.jpg binary
+*.jpeg binary
 *.gif binary
 *.webp binary
 *.ico binary
 *.mo binary
 *.pdf binary
+*.xls binary
+*.xlsx binary
 *.phar binary
 *.woff binary
 *.woff2 binary
@@ -48,6 +51,9 @@
 *.webm binary
 *.mp4 binary
 *.ogv binary
+*.psd binary
+*.eps binary
+*.ai binary
 
 # Remove files for archives generated using `git archive`
 phpstan.neon export-ignore

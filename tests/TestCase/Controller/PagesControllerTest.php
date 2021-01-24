@@ -38,7 +38,7 @@ class PagesControllerTest extends TestCase
     protected $apiClient = null;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -50,7 +50,7 @@ class PagesControllerTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -63,7 +63,6 @@ class PagesControllerTest extends TestCase
      * Test home() method
      *
      * @return void
-     *
      * @covers ::home()
      */
     public function testHome(): void
@@ -79,7 +78,6 @@ class PagesControllerTest extends TestCase
      * Test index() method with static template
      *
      * @return void
-     *
      * @covers ::index()
      */
     public function testIndexStaticTemplate(): void
@@ -95,7 +93,6 @@ class PagesControllerTest extends TestCase
      * Test index() method with not found content
      *
      * @return void
-     *
      * @covers ::index()
      */
     public function testIndexNotFound(): void
@@ -111,7 +108,6 @@ class PagesControllerTest extends TestCase
      * Test index method()
      *
      * @return void
-     *
      * @covers ::index()
      */
     public function testIndex(): void
