@@ -48,11 +48,7 @@
         "cs-check": "vendor/bin/phpcs -p src/ tests/",
         "cs-fix": "vendor/bin/phpcbf -p src/ tests/",
         "stan": "phpstan analyse",
-        "test": "vendor/bin/phpunit --colors=always",
-        "update-dev": [
-            "@composer update",
-            "@cs-setup"
-        ]
+        "test": "vendor/bin/phpunit --colors=always"
     },
     "prefer-stable": true,
     "config": {
