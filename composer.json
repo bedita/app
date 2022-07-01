@@ -45,8 +45,8 @@
             "@cs-check"
         ],
         "stan": "vendor/bin/phpstan analyse",
-        "cs-check": "vendor/bin/phpcs -n -p --extensions=php -src/ tests/",
-        "cs-fix": "vendor/bin/phpcbf --colors -p src/ tests/",
+        "cs-check": "vendor/bin/phpcs -n -p src/ tests/ config/",
+        "cs-fix": "vendor/bin/phpcbf --colors -p src/ tests/ config/",
         "test": "phpunit --colors=always"
     },
     "prefer-stable": true,
