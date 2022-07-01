@@ -70,13 +70,13 @@ return static function (RouteBuilder $routes) {
         );
 
         /**
-         * `/:item`: Folders via folder uname/ID or static template content
-         * `/:folder/:content`: Display content inside a folder
+         * `/{item}`: Folders via folder uname/ID or static template content
+         * `/{folder}/{content}`: Display content inside a folder
          *
          * Uncomment `routeClass` to activate I18n routes
          */
         $builder->connect(
-            '/:item',
+            '/{item}',
             ['controller' => 'Pages', 'action' => 'index'],
             [
                 '_name' => 'pages:index',
@@ -91,8 +91,8 @@ return static function (RouteBuilder $routes) {
          * The `fallbacks` method is a shortcut for
          *
          * ```
-         * $builder->connect('/:controller', ['action' => 'index']);
-         * $builder->connect('/:controller/:action/*', []);
+         * $builder->connect('/{controller}', ['action' => 'index']);
+         * $builder->connect('/{controller}/{action}/*', []);
          * ```
          *
          * You can remove these routes once you've connected the
