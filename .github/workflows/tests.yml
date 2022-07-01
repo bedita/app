@@ -1,19 +1,21 @@
-name: 'Run tests'
+name: 'php'
 
 on:
   pull_request:
     paths:
       - '**/*.php'
       - '.github/workflows/*'
+      - 'composer.json'
   push:
     paths:
       - '**/*.php'
       - '.github/workflows/*'
+      - 'composer.json'
 
 jobs:
   cs:
     name: 'Check coding style'
-    runs-on: 'ubuntu-20.04'
+    runs-on: 'ubuntu-latest'
 
     steps:
       - name: 'Checkout current revision'
@@ -47,12 +49,13 @@ jobs:
         run: |
           vendor/bin/phpcs -n -p --extensions=php \
             --standard=vendor/cakephp/cakephp-codesniffer/CakePHP \
+            --ignore=test/files \
             ./config ./src ./tests
 
   stan:
     name: 'Static code analyzer'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
-    runs-on: 'ubuntu-20.04'
+    runs-on: 'ubuntu-latest'
     continue-on-error: true
 
     steps:
@@ -63,7 +66,7 @@ jobs:
         uses: 'shivammathur/setup-php@v2'
         with:
           php-version: '7.4'
-          tools: 'composer, phpstan'
+          tools: 'composer'
           extensions: 'mbstring, intl'
           coverage: 'none'
 
@@ -84,23 +87,51 @@ jobs:
         run: 'composer install --prefer-dist --no-interaction'
 
       - name: 'Run PHP STAN'
-        run: |
-          phpstan analyse --no-progress src
+        run: 'vendor/bin/phpstan analyse --no-progress --error-format=github'
+
+  undeclared-dependencies:
+    name: 'Check missing dependencies'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: 'Checkout current revision'
+        uses: 'actions/checkout@v2'
+
+      - name: 'Setup PHP'
+        uses: 'shivammathur/setup-php@v2'
+        with:
+          php-version: '7.4'
+          tools: 'composer, composer-require-checker'
+          extensions: 'mbstring, intl'
+          coverage: 'none'
+
+      - name: 'Discover Composer cache directory'
+        id: 'cachedir'
+        run: 'echo "::set-output name=path::$(composer global config cache-dir)"'
+
+      - name: 'Share Composer cache across runs'
+        uses: 'actions/cache@v2'
+        with:
+          path: '${{ steps.cachedir.outputs.path }}'
+          key: "composer-${{ github.job }}-${{ hashFiles('**/composer.json') }}"
+          restore-keys: |
+            composer-${{ github.job }}-
+            composer-
+
+      - name: 'Install dependencies with Composer'
+        run: 'composer install --prefer-dist --no-interaction'
+
+      - name: 'Run ComposerRequireChecker'
+        run: 'composer-require-checker check'
 
   unit:
     name: 'Run unit tests'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
-    runs-on: 'ubuntu-20.04'
-    env:
-      BEDITA_API_KEY: 12345
-      BEDITA_API: http://127.0.0.1:8080
-      BEDITA_ADMIN_USR: admin
-      BEDITA_ADMIN_PWD: admin
-      BEDITA_DOCKER_IMG: bedita/bedita:4.4.0
+    runs-on: 'ubuntu-latest'
 
     strategy:
       matrix:
-        php-version: [7.2, 7.3, 7.4]
+        php-version: [7.4, 8.0, 8.1]
 
     steps:
       - name: 'Checkout current revision'
@@ -108,21 +139,6 @@ jobs:
 
       - name: 'Composer config GH token if available'
         run: 'if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi'
-
-      - name: 'Docker pull bedita image'
-        run: 'docker pull ${BEDITA_DOCKER_IMG}'
-
-      - name: 'Docker inspect bedita image'
-        run: 'docker inspect ${BEDITA_DOCKER_IMG}'
-
-      - name: 'Docker run bedita image'
-        run: 'docker run --name api -d -p 127.0.0.1:8080:80 --env BEDITA_API_KEY=${BEDITA_API_KEY} --env BEDITA_ADMIN_USR=${BEDITA_ADMIN_USR} --env BEDITA_ADMIN_PWD=${BEDITA_ADMIN_PWD} ${BEDITA_DOCKER_IMG}'
-
-      - name: 'Wait for 10'
-        run: 'sleep 10'
-
-      - name: 'Docker ps - show all containers'
-        run: 'docker ps -a'
 
       - name: 'Setup PHP'
         uses: 'shivammathur/setup-php@v2'
@@ -145,13 +161,17 @@ jobs:
             composer-
 
       - name: 'Install dependencies with Composer'
-        run: |
-          composer install --prefer-dist --no-interaction
-          composer run-script post-install-cmd --no-interaction
-          rm config/.env
+        run: 'composer install --prefer-dist --no-interaction'
 
       - name: 'Run PHPUnit with coverage'
         run: 'vendor/bin/phpunit --coverage-clover=clover.xml'
+
+      - name: Check test coverage
+        id: test-coverage
+        uses: johanvanhelden/gha-clover-test-coverage-check@v1
+        with:
+          percentage: '85'
+          filename: 'clover.xml'
 
       - name: 'Export coverage results'
         uses: 'codecov/codecov-action@v1'
@@ -164,3 +184,44 @@ jobs:
         with:
           name: 'PHP ${{ matrix.php }}'
           path: 'clover.xml'
+
+  unit-lowest:
+    name: 'Run unit tests with lowest-matching dependencies versions'
+    if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: 'Checkout current revision'
+        uses: 'actions/checkout@v2'
+
+      - name: 'Install GNU gettext'
+        run: 'sudo apt-get install -y gettext'
+
+      - name: 'Composer config GH token if available'
+        run: 'if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi'
+
+      - name: 'Setup PHP'
+        uses: 'shivammathur/setup-php@v2'
+        with:
+          php-version: '7.4'
+          tools: 'composer'
+          extensions: 'mbstring, intl, pdo_sqlite'
+
+      - name: 'Discover Composer cache directory'
+        id: 'cachedir'
+        run: 'echo "::set-output name=path::$(composer global config cache-dir)"'
+
+      - name: 'Share Composer cache across runs'
+        uses: 'actions/cache@v2'
+        with:
+          path: '${{ steps.cachedir.outputs.path }}'
+          key: "composer-lowest-${{ hashFiles('**/composer.json') }}"
+          restore-keys: |
+            composer-lowest-
+            composer-
+
+      - name: 'Install dependencies with Composer'
+        run: 'composer update --prefer-lowest --prefer-dist --no-interaction'
+
+      - name: 'Run PHPUnit'
+        run: 'vendor/bin/phpunit'
