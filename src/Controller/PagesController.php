@@ -69,11 +69,11 @@ class PagesController extends AppController
             throw new NotFoundException(__('Content not found'));
         }
 
-        $folder = (array)Hash::get($resp1, 'data');
-        $children = (array)Hash::get($resp2, 'data');
+        $folder = (array)Hash::get((array)$resp1, 'data');
+        $children = (array)Hash::get((array)$resp2, 'data');
 
-        $included = (array)Hash::get($resp1, 'included', []);
-        $included = array_merge($included, (array)Hash::get($resp2, 'included', []));
+        $included = (array)Hash::get((array)$resp1, 'included', []);
+        $included = array_merge($included, (array)Hash::get((array)$resp2, 'included', []));
         $this->set(compact('folder', 'children', 'included'));
 
         // Load custom template if available

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * BEdita, API-first content management framework
- * Copyright 2020 ChannelWeb Srl, Chialab Srl
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -71,7 +71,7 @@ class PagesControllerTest extends TestCase
         $this->assertResponseOk();
         $this->assertLayout('default');
         $this->assertTemplate('home');
-        $this->assertResponseContains('BEdita4 sample Web App');
+        $this->assertResponseContains('BEdita Example Web App');
     }
 
     /**

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * BEdita, API-first content management framework
- * Copyright 2020-2021 ChannelWeb Srl, Chialab Srl
+ * Copyright 2020-2022 ChannelWeb Srl, Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,13 +16,11 @@ namespace App;
 
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
-use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
@@ -46,11 +44,6 @@ class Application extends BaseApplication
 
         if (PHP_SAPI === 'cli') {
             $this->bootstrapCli();
-        } else {
-            FactoryLocator::add(
-                'Table',
-                (new TableLocator())->allowFallbackClass(false)
-            );
         }
 
         /*
@@ -108,7 +101,7 @@ class Application extends BaseApplication
             ->add(new BodyParserMiddleware())
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
-            // https://book.cakephp.org/4/en/controllers/middleware.html#cross-site-request-forgery-csrf-middleware
+            // https://book.cakephp.org/4/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
             ]));
@@ -136,6 +129,7 @@ class Application extends BaseApplication
      */
     protected function bootstrapCli(): void
     {
+        $this->addOptionalPlugin('Cake/Repl');
         $this->addOptionalPlugin('Bake');
 
         // Load more plugins here

@@ -4,7 +4,7 @@ This is the web app based on BEdita web app.
 
 ## Requirements
 
-1. PHP >= 7.2
+1. PHP 7.4, 8.0 or 8.1
 1. Download latest [Composer](https://getcomposer.org/doc/00-intro.md) or update via `composer self-update`.
 
 ## Install dependencies
@@ -14,6 +14,7 @@ Install composer dependencies.
 ```bash
 composer install
 ```
+
 ## Setup folders
 
 Logs and tmp folder permissions should be fine (`composer install` deals with them).
@@ -67,9 +68,11 @@ To activate:
 
 * in `config/app.php` uncomment `I18n` key and setup your wanted configuration
 * in `src/Application.php` load `BEdita/I18n` plugin with middleware enabled
+
   ```php
   $this->addPlugin('BEdita/I18n', ['middleware' => true]);
   ```
+
 * in `config/routes.php` uncomment lines with `'routeClass' => 'BEdita/I18n.I18nRoute'` to enable routing rules
 
 After that evey URL path will have a language prefix like `/en` automatically generated.

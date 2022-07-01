@@ -49,11 +49,12 @@ class ApplicationTest extends TestCase
         $app->bootstrap();
         $plugins = $app->getPlugins();
 
-        $this->assertCount(4, $plugins);
+        $this->assertCount(5, $plugins);
         $this->assertSame('BEdita/I18n', $plugins->get('BEdita/I18n')->getName());
         $this->assertSame('BEdita/WebTools', $plugins->get('BEdita/WebTools')->getName());
         $this->assertSame('DebugKit', $plugins->get('DebugKit')->getName());
         $this->assertSame('Bake', $plugins->get('Bake')->getName());
+        $this->assertSame('Cake/Repl', $plugins->get('Cake/Repl')->getName());
     }
 
     /**
