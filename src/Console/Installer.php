@@ -72,6 +72,20 @@ class Installer
     }
 
     /**
+     * Handle post creationg tasks.
+     *
+     * @param \Composer\Script\Event $event The composer event object.
+     * @throws \Exception Exception raised by validator.
+     * @return void
+     */
+    public static function postCreateProject(Event $event): void
+    {
+        $io = $event->getIO();
+        $rootDir = dirname(dirname(__DIR__));
+        static::createReadme($rootDir, $io);
+    }
+
+    /**
      * Create config/app_local.php file if it does not exist.
      *
      * @param string $dir The application's root directory.
@@ -103,6 +117,25 @@ class Installer
             copy($appDotEnvTemplate, $appDotEnv);
             $io->write('Created `config/.env` file');
         }
+    }
+
+    /**
+     * If README-dest.md doesn't exist, skip.
+     * Move README-dest.md into README.md otherwise.
+     *
+     * @param string $dir The application's root directory.
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return void
+     */
+    public static function createReadme($dir, $io)
+    {
+        $readmeTemplate = sprintf('%s/README-dest.md', $dir);
+        if (!file_exists($readmeTemplate)) {
+            return;
+        }
+        $readme = sprintf('%s/README.md', $dir);
+        rename($readmeTemplate, $readme);
+        $io->write('`README.md` file overridden');
     }
 
     /**

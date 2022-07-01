@@ -1,11 +1,13 @@
 # BEdita App
-[![Build Status](https://travis-ci.com/bedita/app.svg?branch=master)](https://travis-ci.com/bedita/app)
+
+[![Run tests](https://github.com/bedita/app/workflows/Run%20tests/badge.svg)](https://github.com/bedita/app/actions?query=workflow%3A%22Run+tests%22)
+[![Code Coverage](https://codecov.io/gh/bedita/app/master/graph/badge.svg)](https://codecov.io/gh/bedita/app/branch/master)
 
 This is the BEdita skeleton web app.
 
 ## Requirements
 
-1. PHP >= 7.2
+1. PHP 7.4, 8.0 or 8.1
 1. Download latest [Composer](https://getcomposer.org/doc/00-intro.md) or update via `composer self-update`.
 
 ## Installation
