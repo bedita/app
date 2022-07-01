@@ -39,7 +39,10 @@
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-update-cmd": "App\\Console\\Installer::postInstall",
-        "post-create-project-cmd": "App\\Console\\Installer::postInstall",
+        "post-create-project-cmd": [
+            "App\\Console\\Installer::postCreateProject",
+            "App\\Console\\Installer::postInstall"
+        ],
         "check": [
             "@test",
             "@cs-check"
