@@ -71,7 +71,7 @@ class PagesControllerTest extends TestCase
         $this->assertResponseOk();
         $this->assertLayout('default');
         $this->assertTemplate('home');
-        $this->assertResponseContains('BEdita4 sample Web App');
+        $this->assertResponseContains('BEdita Example Web App');
     }
 
     /**
