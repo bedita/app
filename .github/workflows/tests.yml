@@ -89,41 +89,6 @@ jobs:
       - name: 'Run PHP STAN'
         run: 'vendor/bin/phpstan analyse --no-progress --error-format=github'
 
-  undeclared-dependencies:
-    name: 'Check missing dependencies'
-    runs-on: 'ubuntu-latest'
-
-    steps:
-      - name: 'Checkout current revision'
-        uses: 'actions/checkout@v2'
-
-      - name: 'Setup PHP'
-        uses: 'shivammathur/setup-php@v2'
-        with:
-          php-version: '7.4'
-          tools: 'composer, composer-require-checker'
-          extensions: 'mbstring, intl'
-          coverage: 'none'
-
-      - name: 'Discover Composer cache directory'
-        id: 'cachedir'
-        run: 'echo "::set-output name=path::$(composer global config cache-dir)"'
-
-      - name: 'Share Composer cache across runs'
-        uses: 'actions/cache@v2'
-        with:
-          path: '${{ steps.cachedir.outputs.path }}'
-          key: "composer-${{ github.job }}-${{ hashFiles('**/composer.json') }}"
-          restore-keys: |
-            composer-${{ github.job }}-
-            composer-
-
-      - name: 'Install dependencies with Composer'
-        run: 'composer install --prefer-dist --no-interaction'
-
-      - name: 'Run ComposerRequireChecker'
-        run: 'composer-require-checker check'
-
   unit:
     name: 'Run unit tests'
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
