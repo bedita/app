@@ -24,79 +24,80 @@
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 
-/*
- * The default class to use for all routes
- *
- * The following route classes are supplied with CakePHP and are appropriate
- * to set as the default:
- *
- * - Route
- * - InflectedRoute
- * - DashedRoute
- *
- * If no call is made to `Router::defaultRouteClass()`, the class used is
- * `Route` (`Cake\Routing\Route\Route`)
- *
- * Note that `Route` does not do any inflections on URLs which will result in
- * inconsistently cased URLs when used with `:plugin`, `:controller` and
- * `:action` markers.
- */
-/** @var \Cake\Routing\RouteBuilder $routes */
-$routes->setRouteClass(DashedRoute::class);
-
-$routes->scope('/', function (RouteBuilder $builder) {
+return static function (RouteBuilder $routes) {
     /*
-     * Here, we are connecting '/api' path to proxy requests directly to BEdita4 API.
-     * Uncomment all or single HTTP method you want if you need this functionality.
+     * The default class to use for all routes
+     *
+     * The following route classes are supplied with CakePHP and are appropriate
+     * to set as the default:
+     *
+     * - Route
+     * - InflectedRoute
+     * - DashedRoute
+     *
+     * If no call is made to `Router::defaultRouteClass()`, the class used is
+     * `Route` (`Cake\Routing\Route\Route`)
+     *
+     * Note that `Route` does not do any inflections on URLs which will result in
+     * inconsistently cased URLs when used with `{plugin}`, `{controller}` and
+     * `{action}` markers.
      */
-    // $builder->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $builder) {
-    //     // This route's name will be `api:get`
-    //     $builder->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
-    // });
+    $routes->setRouteClass(DashedRoute::class);
 
-    /*
-     * Here, we are connecting '/' (base path) to a controller called 'Pages',
-     * its action called 'home'
-     *
-     * Uncomment `routeClass` to activate I18n routes
-     */
-    $builder->connect(
-        '/',
-        ['controller' => 'Pages', 'action' => 'home'],
-        [
-            '_name' => 'pages:home',
-            // 'routeClass' => 'BEdita/I18n.I18nRoute',
-        ]
-    );
+    $routes->scope('/', function (RouteBuilder $builder) {
+        /*
+         * Here, we are connecting '/api' path to proxy requests directly to BEdita4 API.
+         * Uncomment all or single HTTP method you want if you need this functionality.
+         */
+        // $builder->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $builder) {
+        //     // This route's name will be `api:get`
+        //     $builder->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
+        // });
 
-    /**
-     * `/:item`: Folders via folder uname/ID or static template content
-     * `/:folder/:content`: Display content inside a folder
-     *
-     * Uncomment `routeClass` to activate I18n routes
-     */
-    $builder->connect(
-        '/:item',
-        ['controller' => 'Pages', 'action' => 'index'],
-        [
-            '_name' => 'pages:index',
-            // 'routeClass' => 'BEdita/I18n.I18nRoute',
-        ]
-    )
-    ->setPass(['item']);
+        /*
+         * Here, we are connecting '/' (base path) to a controller called 'Pages',
+         * its action called 'home'
+         *
+         * Uncomment `routeClass` to activate I18n routes
+         */
+        $builder->connect(
+            '/',
+            ['controller' => 'Pages', 'action' => 'home'],
+            [
+                '_name' => 'pages:home',
+                // 'routeClass' => 'BEdita/I18n.I18nRoute',
+            ]
+        );
 
-    /*
-     * Connect catchall routes for all controllers.
-     *
-     * The `fallbacks` method is a shortcut for
-     *
-     * ```
-     * $builder->connect('/:controller', ['action' => 'index']);
-     * $builder->connect('/:controller/:action/*', []);
-     * ```
-     *
-     * You can remove these routes once you've connected the
-     * routes you want in your application.
-     */
-    // $builder->fallbacks();
-});
+        /**
+         * `/:item`: Folders via folder uname/ID or static template content
+         * `/:folder/:content`: Display content inside a folder
+         *
+         * Uncomment `routeClass` to activate I18n routes
+         */
+        $builder->connect(
+            '/:item',
+            ['controller' => 'Pages', 'action' => 'index'],
+            [
+                '_name' => 'pages:index',
+                // 'routeClass' => 'BEdita/I18n.I18nRoute',
+            ]
+        )
+        ->setPass(['item']);
+
+        /*
+         * Connect catchall routes for all controllers.
+         *
+         * The `fallbacks` method is a shortcut for
+         *
+         * ```
+         * $builder->connect('/:controller', ['action' => 'index']);
+         * $builder->connect('/:controller/:action/*', []);
+         * ```
+         *
+         * You can remove these routes once you've connected the
+         * routes you want in your application.
+         */
+        // $builder->fallbacks();
+    });
+};
