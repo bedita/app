@@ -46,11 +46,6 @@ class Application extends BaseApplication
 
         if (PHP_SAPI === 'cli') {
             $this->bootstrapCli();
-        } else {
-            FactoryLocator::add(
-                'Table',
-                (new TableLocator())->allowFallbackClass(false)
-            );
         }
 
         /*
