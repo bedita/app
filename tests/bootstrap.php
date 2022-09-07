@@ -26,6 +26,9 @@ if (!getenv('BEDITA_API') && file_exists(dirname(__DIR__) . '/tests/.env')) {
         ->toServer();
 }
 
+// set `APP_NAME` env to avoid config/.env load
+putenv('APP_NAME=TESTAPP');
+
 /**
  * Test runner bootstrap.
  *
