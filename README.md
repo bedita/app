@@ -7,7 +7,7 @@ This is the BEdita skeleton web app.
 
 ## Requirements
 
-1. PHP 7.4, 8.0 or 8.1
+1. PHP 7.4, 8.0, 8.1 or 8.2
 1. Download latest [Composer](https://getcomposer.org/doc/00-intro.md) or update via `composer self-update`.
 
 ## Installation
