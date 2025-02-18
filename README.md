@@ -1,6 +1,6 @@
 # BEdita App
 
-[![Run tests](https://github.com/bedita/app/workflows/Run%20tests/badge.svg)](https://github.com/bedita/app/actions?query=workflow%3A%22Run+tests%22)
+[![Run tests](https://github.com/bedita/app/actions/workflows/php.yml/badge.svg)](https://github.com/bedita/app/actions?query=workflow%3A%22php%22)
 [![Code Coverage](https://codecov.io/gh/bedita/app/master/graph/badge.svg)](https://codecov.io/gh/bedita/app/branch/master)
 
 This is the BEdita skeleton web app.
